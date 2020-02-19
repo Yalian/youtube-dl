@@ -186,9 +186,7 @@ class PlatziCourseIE(PlatziBaseIE):
 
         webpage = self._download_webpage(url, course_name)
 
-        props = self._parse_json(
-            self._search_regex(r'data\s*=\s*({.+?})\s*;', webpage, 'data'),
-            course_name)['initialProps']
+        props = self._parse_json( self._search_regex(r'initialData\s*=\s*({.+?})\s*;', webpage, 'initialData'), course_name)['initialState']
 
         entries = []
         for chapter_num, chapter in enumerate(props['concepts'], 1):
@@ -216,6 +214,7 @@ class PlatziCourseIE(PlatziBaseIE):
                     'chapter': chapter_title,
                     'chapter_number': chapter_num,
                     'chapter_id': chapter_id,
+                    'series': course_name
                 })
 
         course_id = compat_str(try_get(props, lambda x: x['course']['id']))
